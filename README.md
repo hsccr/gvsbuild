@@ -19,7 +19,8 @@ HexChat developers decided that their script should focus on their specific need
 
     * [Visual Studio for Windows Desktop](http://www.visualstudio.com/downloads) - 2013 and 2015 are currently supported.
     * [msys2](https://msys2.github.io/)
-    * [Python 3.4](https://www.python.org/ftp/python/2.7.9/python-2.7.9.amd64.msi) (install in C:\Python34), or other package like [Miniconda 3.4](https://repo.continuum.io/miniconda/Miniconda3-latest-Windows-x86_64.exe)
+    * [Python 3.4.4](https://www.python.org/ftp/python/3.4.4/python-3.4.4.amd64.msi) (install in C:\Python34), or other package like [Miniconda 3.4](https://repo.continuum.io/miniconda/Miniconda3-latest-Windows-x86_64.exe)
+    * [Python 2.7.9](https://www.python.org/ftp/python/2.7.9/python-2.7.9.amd64.msi) (install in C:\Python27) - build only for `libuv`
 
 1. Follow the instructions on the msys2 page to update the core packages. The needed packages for the script (make, diffutils, ...) are download and installed automatically if not presents in the msys2 installation.
 
@@ -29,7 +30,7 @@ HexChat developers decided that their script should focus on their specific need
     C:\cmake\bin;
     C:\gtk-build\nuget;
     C:\msys64; ? 
-    C:\Python27;
+    C:\Python34;
     C:\perl\bin;
     ```
 
@@ -54,10 +55,10 @@ HexChat developers decided that their script should focus on their specific need
 
     ```
     cd C:\gtk-build\github\gtk-win32
-    python build.py build gtk3 clutter libzip libssh libssh2 libuv libcurl libmicrohttpd protobuf-c json-c leveldb -p x64 -c release
-    python build.py build gtk3 clutter libzip libssh libssh2 libuv libcurl libmicrohttpd protobuf-c json-c leveldb -p x64 -c debug
-    python build.py build gtk3 clutter libzip libssh libssh2 libuv libcurl libmicrohttpd protobuf-c json-c leveldb -p x86 -c release
-    python build.py build gtk3 clutter libzip libssh libssh2 libuv libcurl libmicrohttpd protobuf-c json-c leveldb -p x86 -c debug
+    python build.py build gtk3 clutter libzip libssh libssh2 libuv libcurl libmicrohttpd protobuf-c json-c leveldb -p x64 -c release --vs-ver 14
+    python build.py build gtk3 clutter libzip libssh libssh2 libuv libcurl libmicrohttpd protobuf-c json-c leveldb -p x64 -c debug --vs-ver 14
+    python build.py build gtk3 clutter libzip libssh libssh2 libuv libcurl libmicrohttpd protobuf-c json-c leveldb -p x86 -c release --vs-ver 14
+    python build.py build gtk3 clutter libzip libssh libssh2 libuv libcurl libmicrohttpd protobuf-c json-c leveldb -p x86 -c debug --vs-ver 14
     ```
     or
     ```
