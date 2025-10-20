@@ -336,14 +336,12 @@ class Expat(Tarball, CmakeProject):
         self.install(r".\COPYING share\doc\expat")
 
 @project_add
-class Gperf(GitRepo, Meson):
+class Gperf(Tarball, Meson):
     def __init__(self):
         Meson.__init__(
             self,
             "gperf",
-            repo_url="https://gitlab.freedesktop.org/tpm/gperf.git",
-            fetch_submodules=False,
-            tag="c24359b4eab86d71c655c3b3fc969f13aac879ce",
+            archive_url="https://download-mirror.savannah.gnu.org/releases/gperf/gperf-3.1.tar.gz",
             dependencies=["ninja"],
         )
 
@@ -616,27 +614,27 @@ class Project_gobject_introspection(Tarball, Meson):
         Meson.build(self, meson_params='-Dpython=%s\\python.exe -Dcairo_libname=cairo-gobject.dll' % (py_dir, ))
 
 @project_add
-class Project_graphene(GitRepo, Meson):
+class Graphene(Tarball, Meson):
     def __init__(self):
-        Meson.__init__(self,
-            'graphene',
-            repo_url = 'https://github.com/ebassi/graphene',
-            fetch_submodules = False,
-            tag = None,
-            dependencies = ['ninja', 'meson', 'pkgconf', 'glib'],
-            )
+        Meson.__init__(
+            self,
+            "graphene",
+            archive_url="https://github.com/ebassi/graphene/archive/refs/tags/1.10.8.tar.gz",
+            hash="922dc109d2dc5dc56617a29bd716c79dd84db31721a8493a13a5f79109a4a4ed",
+            dependencies=["ninja", "meson", "pkgconf", "glib"],
+            patches=["001-fix-python-lookup.patch"],
+        )
         if self.opts.enable_gi:
-            self.add_dependency('gobject-introspection')
-            enable_gi = 'true'
+            self.add_dependency("gobject-introspection")
+            enable_gi = "enabled"
         else:
-            enable_gi = 'false'
+            enable_gi = "disabled"
 
-        self.add_param('-Dbenchmarks=false')
-        self.add_param('-Dintrospection=%s' % (enable_gi, ))
+        self.add_param(f"-Dintrospection={enable_gi}")
 
     def build(self):
         Meson.build(self, make_tests=True)
-        self.install(r'.\LICENSE share\doc\graphene')
+        self.install(r".\LICENSE share\doc\graphene")
 
 @project_add
 class Project_grpc(GitRepo, CmakeProject):
@@ -964,6 +962,42 @@ class Project_gtk3_24(Tarball, Meson):
         Meson.build(self, meson_params='-Dtests=false -Ddemos=false -Dexamples=false')
 
         self.install(r'.\COPYING share\doc\gtk3')
+
+@project_add
+class Gtk4(Tarball, Meson):
+    def __init__(self):
+        Project.__init__(self,
+            "gtk4",
+            archive_url="https://download.gnome.org/sources/gtk/4.18/gtk-4.18.6.tar.xz",
+            hash="e1817c650ddc3261f9a8345b3b22a26a5d80af154630dedc03cc7becefffd0fa",
+            dependencies=[
+                "gdk-pixbuf",
+                "pango",
+                "libepoxy",
+                "graphene",
+                "cairo",
+                "harfbuzz",
+                "glib",
+                "fribidi",
+            ],
+        )
+        if self.opts.enable_gi:
+            self.add_dependency("gobject-introspection")
+            enable_gi = "enabled"
+        else:
+            enable_gi = "disabled"
+
+        self.add_param(f"-Dintrospection={enable_gi}")
+        self.add_param("-Dbuild-tests=false")
+        self.add_param("-Dbuild-testsuite=false")
+        self.add_param("-Dbuild-demos=false")
+        self.add_param("-Dbuild-examples=false")
+        self.add_param("-Dmedia-gstreamer=disabled")
+        self.add_param("-Dvulkan=disabled")
+
+    def build(self):
+        Meson.build(self)
+        self.install(r".\COPYING share\doc\gtk4")
 
 @project_add
 class Project_gtksourceview3(Tarball, Project, _MakeGir):
